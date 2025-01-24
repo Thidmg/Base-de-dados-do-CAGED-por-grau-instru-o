@@ -1,0 +1,274 @@
+---
+title: "base elcyon"
+author: "thiago"
+date: "31/05/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{R, warning = FALSE, message = FALSE, dpi = 500, results = "assis"}
+library(dplyr)  
+library(knitr)
+library(zoo)
+library(ggplot2)
+library(readxl)
+library(reshape)
+library(reshape2)
+library(scales)
+library(urca)
+library(Quandl)
+ library(tsbox)
+library(RJDemetra)
+library(writexl)
+
+
+
+
+setwd("C:/Users/thiag/Documents/Area de trabalho/Dados_caged_codigo_R_dessa")
+
+
+file_path <- "C:/Users/thiag/Documents/Area de trabalho/Dados_caged_codigo_R_dess/GRAUINSTRUCARLOS_2000.csv"
+#install.packages("readr")
+
+
+
+library(readxl)
+
+
+#Caged
+
+
+
+excel.caged <- ts(read.csv2('GRAUINSTRUCARLOS_2000.csv', 
+                            header = TRUE, sep = ';', dec = ',', 
+                            fileEncoding = "latin1")[,-1], 
+                  start = c(2000, 1), end = c(2019, 12), freq = 12)
+
+#Admitidos analfabetoss
+
+adm.analf=excel.caged[,1]
+
+plot(adm.analf)
+adm.analf <- x13(adm.analf) # X-13ARIMA method
+adm.analf=adm.analf$final$series[,2]
+plot(adm.analf)
+head(adm.analf)
+
+#Admitidos com até quinto ano incompleto
+adm.5.inc=excel.caged[,2]
+plot(adm.5.inc)
+adm.5.inc <- x13(adm.5.inc) # X-13ARIMA method
+adm.5.inc=adm.5.inc$final$series[,2]
+plot(adm.5.inc)
+
+
+#Admitidos com quinto ano completo
+adm.5.comp=excel.caged[,3]
+plot(adm.5.comp)
+adm.5.comp <- x13(adm.5.comp) # X-13ARIMA method
+adm.5.comp=adm.5.comp$final$series[,2]
+plot(adm.5.comp)
+
+#Admitidos com sexto a 9 ano 
+adm.6.a.9=excel.caged[,4]
+plot(adm.6.a.9)
+adm.6.a.9 <- x13(adm.6.a.9) # X-13ARIMA method
+adm.6.a.9=adm.6.a.9$final$series[,2]
+plot(adm.6.a.9)
+
+#Admitidos fundamental completo
+adm.fund.comp=excel.caged[,5]
+plot(adm.fund.comp)
+adm.fund.comp <- x13(adm.fund.comp) # X-13ARIMA method
+adm.fund.comp=adm.fund.comp$final$series[,2]
+plot(adm.fund.comp)
+
+
+#Admitidos médio incompleto
+adm.med.inc=excel.caged[,6]
+plot(adm.med.inc)
+adm.med.inc <- x13(adm.med.inc) # X-13ARIMA method
+adm.med.inc=adm.med.inc$final$series[,2]
+plot(adm.med.inc)
+
+
+
+#Admitidos médio completo
+adm.med.comp=excel.caged[,7]
+plot(adm.med.comp)
+adm.med.comp <- x13(adm.med.comp) # X-13ARIMA method
+adm.med.comp=adm.med.comp$final$series[,2]
+plot(adm.med.comp)
+
+#Admitidos superior incompleto
+adm.sup.inc=excel.caged[,8]
+plot(adm.sup.inc)
+adm.sup.inc <- x13(adm.sup.inc) # X-13ARIMA method
+adm.sup.inc=adm.sup.inc$final$series[,2]
+plot(adm.sup.inc)
+
+
+#Admitidos superior completo
+adm.sup.comp=excel.caged[,9]
+plot(adm.sup.comp)
+adm.sup.comp <- x13(adm.sup.comp) # X-13ARIMA method
+adm.sup.comp=adm.sup.comp$final$series[,2]
+plot(adm.sup.comp)
+
+geral.y=ts.intersect(adm.analf,adm.5.inc,adm.5.comp,adm.6.a.9,adm.fund.comp,adm.med.inc, adm.med.comp,adm.sup.inc,adm.sup.comp)
+plot(geral.y)
+
+geral.y=ts.intersect(adm.analf,adm.5.inc,adm.5.comp,adm.6.a.9,adm.fund.comp,adm.med.inc, adm.med.comp,adm.sup.inc,adm.sup.comp)
+plot(geral.y)
+
+
+#Desligados analf
+desl.analf=excel.caged[,11]
+plot(desl.analf)
+desl.analf <- x13(desl.analf) # X-13ARIMA method
+desl.analf=desl.analf$final$series[,2]
+plot(desl.analf)
+tail(desl.analf)
+
+#Desligados com até quinto ano incompleto
+desl.5.inc=excel.caged[,12]
+plot(desl.5.inc)
+desl.5.inc <- x13(desl.5.inc) # X-13ARIMA method
+desl.5.inc=desl.5.inc$final$series[,2]
+plot(desl.5.inc)
+#Desligados com  quinto ano completo
+desl.5.comp=excel.caged[,13]
+plot(desl.5.comp)
+desl.5.comp <- x13(desl.5.comp) # X-13ARIMA method
+desl.5.comp=desl.5.comp$final$series[,2]
+plot(desl.5.comp)
+
+#Desligados com  6 a 9 ano
+desl.6.a.9=excel.caged[,14]
+plot(desl.6.a.9)
+desl.6.a.9 <- x13(desl.6.a.9) # X-13ARIMA method
+desl.6.a.9=desl.6.a.9$final$series[,2]
+plot(desl.6.a.9)
+
+#Desligados com  médio incompleto
+desl.fund.comp=excel.caged[,15]
+desl.fund.comp <- x13(desl.fund.comp) # X-13ARIMA method
+desl.fund.comp=desl.fund.comp$final$series[,2]
+plot(desl.fund.comp)
+
+#Desligados com  médio completo
+desl.med.inc=excel.caged[,16]
+plot(desl.med.inc)
+desl.med.inc <- x13(desl.med.inc) # X-13ARIMA method
+desl.med.inc=desl.med.inc$final$series[,2]
+plot(desl.med.inc)
+
+#Desligados médio completo
+desl.med.comp=excel.caged[,17]
+plot(desl.med.comp)
+desl.med.comp <- x13(desl.med.comp) # X-13ARIMA method
+desl.med.comp=desl.med.comp$final$series[,2]
+plot(desl.med.comp)
+
+#Desligados superior incompleto
+desl.sup.inc=excel.caged[,18]
+plot(desl.sup.inc)
+desl.sup.inc <- x13(desl.sup.inc) # X-13ARIMA method
+desl.sup.inc=desl.sup.inc$final$series[,2]
+plot(desl.sup.inc)
+
+#Desligados superiorcompleto
+desl.sup.comp=excel.caged[,19]
+plot(desl.sup.comp)
+desl.sup.comp <- x13(desl.sup.comp) # X-13ARIMA method
+desl.sup.comp=desl.sup.comp$final$series[,2]
+plot(desl.sup.comp)
+
+
+
+
+
+
+######################################
+#Desligados voluntarios
+deslVOLanalf=excel.caged[,21]
+plot(deslVOLanalf)
+head(deslVOLanalf)
+deslVOLanalf <- x13(deslVOLanalf) # X-13ARIMA method
+deslVOLanalf=deslVOLanalf$final$series[,2]
+plot(deslVOLanalf)
+tail(deslVOLanalf)
+
+#Desligados com até quinto ano incompleto
+deslVOL5.inc=excel.caged[,22]
+plot(deslVOL5.inc)
+deslVOL5.inc <- x13(deslVOL5.inc) # X-13ARIMA method
+deslVOL5.inc=deslVOL5.inc$final$series[,2]
+plot(deslVOL5.inc)
+#Desligados com  quinto ano completo
+deslVOL5.comp=excel.caged[,23]
+plot(deslVOL5.comp)
+deslVOL5.comp <- x13(deslVOL5.comp) # X-13ARIMA method
+deslVOL5.comp=deslVOL5.comp$final$series[,2]
+plot(deslVOL5.comp)
+
+#Desligados com  6 a 9 ano
+deslVOL6.a.9=excel.caged[,24]
+plot(deslVOL6.a.9)
+deslVOL6.a.9 <- x13(deslVOL6.a.9) # X-13ARIMA method
+deslVOL6.a.9=deslVOL6.a.9$final$series[,2]
+plot(deslVOL6.a.9)
+
+#Desligados com  médio incompleto
+deslVOLfund.comp=excel.caged[,25]
+deslVOLfund.comp <- x13(deslVOLfund.comp) # X-13ARIMA method
+deslVOLfund.comp=deslVOLfund.comp$final$series[,2]
+plot(deslVOLfund.comp)
+
+#Desligados com  médio completo
+deslVOLmed.inc=excel.caged[,26]
+plot(deslVOLmed.inc)
+deslVOLmed.inc <- x13(deslVOLmed.inc) # X-13ARIMA method
+deslVOLmed.inc=deslVOLmed.inc$final$series[,2]
+plot(deslVOLmed.inc)
+
+#Desligados médio completo
+deslVOLmed.comp=excel.caged[,27]
+plot(deslVOLmed.comp)
+deslVOLmed.comp <- x13(deslVOLmed.comp) # X-13ARIMA method
+deslVOLmed.comp=deslVOLmed.comp$final$series[,2]
+plot(deslVOLmed.comp)
+
+#Desligados superior incompleto
+deslVOLsup.inc=excel.caged[,28]
+plot(deslVOLsup.inc)
+deslVOLsup.inc <- x13(deslVOLsup.inc) # X-13ARIMA method
+deslVOLsup.inc=deslVOLsup.inc$final$series[,2]
+plot(deslVOLsup.inc)
+
+#Desligados superiorcompleto
+deslVOLsup.comp=excel.caged[,29]
+plot(deslVOLsup.comp)
+deslVOLsup.comp <- x13(deslVOLsup.comp) # X-13ARIMA method
+deslVOLsup.comp=deslVOLsup.comp$final$series[,2]
+plot(deslVOLsup.comp)
+
+
+geral.y=ts.intersect(adm.analf,adm.5.inc,adm.5.comp,adm.6.a.9,adm.fund.comp,adm.med.inc, adm.med.comp,adm.sup.inc,adm.sup.comp,desl.analf,desl.5.inc,desl.5.comp,desl.6.a.9,desl.fund.comp,desl.med.inc, desl.med.comp,desl.sup.inc,desl.sup.comp,deslVOLanalf,deslVOL5.inc,deslVOL5.comp,deslVOL6.a.9,deslVOLfund.comp,deslVOLmed.inc,deslVOLmed.comp,deslVOLsup.inc,deslVOLsup.comp)
+
+
+
+
+dataframelog=data.frame(Y=as.matrix(geral.y), date=as.Date(as.yearmon(time(geral.y))))
+
+write_xlsx(dataframelog,"C:/Users/thiag/Documents/Area de trabalho/Caged_dessa.xlsx")
+
+
+
+
+
+```
